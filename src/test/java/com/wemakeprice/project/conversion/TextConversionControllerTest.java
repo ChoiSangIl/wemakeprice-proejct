@@ -31,18 +31,23 @@ public class TextConversionControllerTest {
     private TextConversionService textConversionService;
 	
 	private final ObjectMapper objectMapper = new ObjectMapper();
+	
+	private static String TARGET_TEXT = "c2b1a3A0"; 
+	private static int OUTPUT_UNIT_TEXT = 3; 
+	private static String RESULT_QUOTIENT_TEXT = "A0a1b2"; 
+	private static String RESULT_REMAINDER_TEXT = "c3"; 
 
 	@Test
 	@DisplayName("들어온 요청을 받아 줄 수 있다.")
 	public void testTranslate() throws JsonProcessingException, Exception {
 		//given
 		TextConversionRequest request = new TextConversionRequest();
-		request.setTargetText("c2b1a3A0");
-		request.setOutputUnitSet(3);
+		request.setTargetText(TARGET_TEXT);
+		request.setOutputUnitSet(OUTPUT_UNIT_TEXT);
 		
 		TextConversionResponse response = new TextConversionResponse();
-		response.setQuotientText("A0a1b2");
-		response.setRemainderText("c3");
+		response.setQuotientText(RESULT_QUOTIENT_TEXT);
+		response.setRemainderText(RESULT_REMAINDER_TEXT);
 		
 		doReturn(response).when(textConversionService).conversion(any());
 		
@@ -53,7 +58,7 @@ public class TextConversionControllerTest {
 				.content(objectMapper.writeValueAsString(request))
 		)
 		
-		//then
+		//theng
 		.andExpect(status().isOk())
 		.andExpect(jsonPath("quotientText").value("A0a1b2"))
 		.andExpect(jsonPath("remainderText").value("c3"));
