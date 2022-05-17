@@ -72,9 +72,14 @@
 		serialize.forEach(e => {
 			formData[e.name] = e.value;
 		});
-		
-		if(formData.outputUnitSet == ""){
-			alert("출력 단위 묶음을 입력해주세요.");ㅣ
+
+		if (formData.outputUnitSet == "") {
+			alert("출력 단위 묶음을 입력해주세요."); ㅣ
+			return;
+		}
+
+		if (formData.targetText == "") {
+			alert("url을 입력해주세요."); ㅣ
 			return;
 		}
 
@@ -116,10 +121,17 @@
 			$("#resultArea").append(htmlTemplate);
 		}
 	}
-	
+
+	$('#outputUnitSet').keyup(function (event) {
+		if (event.which === 13) {
+			event.preventDefault();
+			conversionText();
+		}
+	});
+
 	//only number..
-	$("#outputUnitSet").keyup(function(event){
-	    var inputVal = $(this).val();
-	    $(this).val(inputVal.replace(/[^0-9]/gi,''));
+	$("#outputUnitSet").keyup(function (event) {
+		var inputVal = $(this).val();
+		$(this).val(inputVal.replace(/[^0-9]/gi, ''));
 	});
 </script>
