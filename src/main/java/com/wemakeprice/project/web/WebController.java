@@ -9,6 +9,7 @@ public class WebController {
 	
     @GetMapping("/")
     public String parse(Model model) {
+        model.addAttribute("title", "wemakeprice-project");
         return "urlConversion";
     }
 }

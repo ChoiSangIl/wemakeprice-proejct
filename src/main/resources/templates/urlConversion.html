@@ -1,4 +1,120 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-	helloword
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title th:text="${title}"></title>
+
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+	<!-- jQuery library -->
+	<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+	<!-- Popper JS -->
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+	<!-- Latest compiled JavaScript -->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+
+<div class="container">
+	<div class="jumbotron mt-3">
+		<h1>wemakeprice-project</h1>
+		<p>URL 문자열 변환</p>
+	</div>
+
+	<form id="frm" class="mt-3">
+		<div class="input-group mb-3">
+			<div class="input-group-prepend">
+				<span class="input-group-text">URL</span>
+			</div>
+			<input id="targetText" name="targetText" type="text" class="form-control" placeholder="INPUT URL">
+		</div>
+
+		<div class="input-group mb-3">
+			<div class="input-group-prepend">
+				<span class="input-group-text">TYPE</span>
+			</div>
+
+			<select class="form-control" id="outputType">
+				<option value="">HTML 태그 제외</option>
+				<option value="html">TEXT 전체</option>
+			</select>
+		</div>
+
+		<div class="input-group mb-3">
+			<div class="input-group-prepend">
+				<span class="input-group-text">출력 단위 묶음</span>
+			</div>
+
+			<input id="outputUnitSet" name="outputUnitSet" type="number" min="0" class="form-control" placeholder="" value="3">
+		</div>
+	</form>
+
+	<div style="text-align: center;">
+		<button type="submit" class="btn btn-dark" onclick="conversionText()">출력</button>
+	</div>
+
+	<h4 class="mt-4">출력결과</h4>
+	<hr />
+	<div id="resultArea" class="mt-3" style="text-align: left;">
+
+	</div>
+</div>
+
 </html>
+
+
+<script th:inline="javascript">
+	function conversionText() {
+		let formData = {};
+		let serialize = $("#frm").serializeArray();
+		serialize.forEach(e => {
+			formData[e.name] = e.value;
+		});
+
+		$.ajax({
+			type: "POST",
+			url: "/text/conversion",
+			contentType: "application/json; charset=utf-8",
+			data: JSON.stringify(formData),
+			dataType: "json",
+			async: true,
+			success: function (result) {
+				setResult(result);
+			},
+			error: function (xhr, status, error) {
+				alert("관리자에게 문의해주세요.");
+				console.log(error);
+			}
+		});
+	}
+
+	function setResult(data) {
+		let quotientText = data.quotientText;
+		let remainderText = data.remainderText;
+		let outputType = $("#outputType option:selected").val();
+
+		let htmlTemplate = "<html>\n"
+			+ "<body>\n"
+			+ "<h5>몫 <span class='badge badge-secondary'>" + quotientText + "</span></h5>\n"
+			+ "<h5>나머지 <span class='badge badge-secondary'>" + remainderText + "</span></h5>\n"
+			+ "</body>\n"
+			+ "</html>\n"
+		let preStartTag = "<xmp>";
+		let preEndTag = "</xmp>";
+
+		$("#resultArea").empty();
+		if (outputType == "html") {
+			$("#resultArea").append(preStartTag + htmlTemplate + preEndTag);
+		} else {
+			$("#resultArea").append(htmlTemplate);
+		}
+	}
+	
+	//only number..
+	$("#outputUnitSet").keyup(function(event){
+	    var inputVal = $(this).val();
+	    $(this).val(inputVal.replace(/[^0-9]/gi,''));
+	});
+</script>
