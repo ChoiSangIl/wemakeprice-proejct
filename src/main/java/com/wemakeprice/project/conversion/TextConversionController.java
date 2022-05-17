@@ -27,7 +27,7 @@ public class TextConversionController {
 	}
 
 	@PostMapping("/text/conversion")
-	public TextConversionResponse translate(@RequestBody TextConversionRequest request) {
+	public TextConversionResponse conversion(@RequestBody TextConversionRequest request) {
 		return textConversionService.conversion(request);
 	}
 }

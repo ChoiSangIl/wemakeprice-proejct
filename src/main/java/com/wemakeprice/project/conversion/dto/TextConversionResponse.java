@@ -28,5 +28,9 @@ public class TextConversionResponse {
 	public void setRemainderText(String remainderText) {
 		this.remainderText = remainderText;
 	}
-	
+
+	@Override
+	public String toString() {
+		return "TextConversionResponse [quotientText=" + quotientText + ", remainderText=" + remainderText + "]";
+	}
 }
