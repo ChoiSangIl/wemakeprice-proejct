@@ -31,7 +31,7 @@ public class TextConversionService {
 		response.setQuotientText(dividor.getQuotientText());
 		response.setRemainderText(dividor.getRemainderText());
 		
-		LOGGER.debug(response.toString());
+		LOGGER.info(response.toString());
 		return response;
 	}
 	
